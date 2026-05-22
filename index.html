@@ -25,8 +25,11 @@
             min-height: 100vh;
             position: relative;
             background-color: #1a0511; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             overflow: hidden;
-            transition: background 1s ease, background-color 1s ease;
+            transition: background 1s ease, background-image 1s ease;
         }
 
         /* حاوية الـ Three.js الشاشية للدخان الحقيقي المتموج */
@@ -294,32 +297,30 @@
             display: none !important;
         }
 
-        /* ستايلات شاشات النتائج النهائية */
-        .mode-glow-bg {
-            background: radial-gradient(circle, #ffc0cb 0%, #ff69b4 100%) !important;
-            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.6);
+        /* --- تعديل واجهة النتيجة لتصبح Blur وزجاجية مثل الصورة تماماً --- */
+        #result-screen {
+            background: rgba(255, 255, 255, 0.25); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border-radius: 40px;
+            padding: 50px 30px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            animation: fadeInResult 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
         }
 
-        .mode-balance-bg {
-            background: linear-gradient(135deg, #2c1a24 0%, #ff69b4 100%) !important;
+        @keyframes fadeInResult {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .mode-revival-bg {
-            background: radial-gradient(circle, #1a0813 0%, #4a1535 100%) !important;
-            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
-        }
-
-        .mode-glow-bg #bg-layer, .mode-balance-bg #bg-layer, .mode-revival-bg #bg-layer {
-            display: none !important;
-        }
-
-        /* انميشن متتابع ولطيف لعناصر واجهة النتيجة الثابتة مع حركة عائمة مستمرة */
         .result-intro {
-            font-size: 1.3rem;
+            font-size: 1.15rem;
             font-weight: 700;
-            color: #ff1493;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            color: #ff66a3; 
+            margin-bottom: 12px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
@@ -329,45 +330,40 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* إضافة توهج سينمائي متبدل للاسم النهائي */
         .result-badge {
-            font-size: 3.4rem;
-            font-weight: 900;
+            font-size: 3.6rem;
+            font-weight: 800;
             color: #ffffff;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            animation: badgeBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both, luxuryGlow 3.5s ease-in-out infinite;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            margin-bottom: 8px;
+            animation: badgeBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
         }
 
         @keyframes badgeBounce {
-            0% { opacity: 0; transform: scale(0.4) rotate(-5deg); }
-            70% { transform: scale(1.06); }
-            100% { opacity: 1; transform: scale(1) rotate(0); }
-        }
-
-        @keyframes luxuryGlow {
-            0%, 100% { text-shadow: 0 4px 15px rgba(0,0,0,0.25), 0 0 20px rgba(255,255,255,0.15); }
-            50% { text-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 35px rgba(255,20,147,0.45); }
+            0% { opacity: 0; transform: scale(0.4); }
+            70% { transform: scale(1.04); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         .result-score {
-            font-size: 2.2rem;
-            font-weight: 800;
+            font-size: 1.9rem;
+            font-weight: 600;
             color: #ffffff;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             animation: fadeInUp 0.6s ease-out 0.3s both;
         }
 
         .result-description {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 500;
             color: #ffffff;
             line-height: 1.6;
-            padding: 0 15px;
-            margin-bottom: 35px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            padding: 0 10px;
+            margin-bottom: 40px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
             direction: ltr; 
             text-align: center;
             animation: fadeInUp 0.6s ease-out 0.45s both;
@@ -379,35 +375,20 @@
         }
 
         .result-cta-text {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.05rem;
+            font-weight: 500;
             color: #ffffff;
-            line-height: 1.5;
+            line-height: 1.6;
             direction: ltr;
             text-align: center;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            padding: 0 10px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            padding: 0 5px;
             animation: softPulse 2.5s infinite ease-in-out;
         }
 
         @keyframes softPulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* دمج الحركة العائمة الهادئة والمستمرة للبطاقة بالكامل */
-        #result-screen {
-            animation: fadeInResult 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards, resultCardFloat 5s ease-in-out infinite;
-        }
-
-        @keyframes fadeInResult {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes resultCardFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
+            50% { opacity: 0.75; }
         }
     </style>
 </head>
@@ -445,12 +426,12 @@
         </div>
 
         <div id="result-screen" class="hidden">
-            <div class="result-intro">Your Whisper result is:</div>
+            <div class="result-intro">Your Whisper Result</div>
             <div id="badge-container" class="result-badge"></div>
-            <div id="score-container" class="result-score">0.0%</div>
+            <div id="score-container" class="result-score"></div>
             <div id="description-container" class="result-description"></div>
             <div class="result-cta-text">
-                Send us your Whisper result (a screenshot)<br>and unlock your Pink Spa experience 💗
+                Send us your result screenshot<br>💗 and unlock your Pink Spa experience
             </div>
         </div>
     </div>
@@ -493,7 +474,7 @@
                     const p = this.particles[i];
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vy += 0.15; // جاذبية خفيفة للأسفل لتعطي طابع مادي حقيقي
+                    p.vy += 0.15; 
                     p.life -= 0.02;
                     if (p.life <= 0) {
                         this.particles.splice(i, 1);
@@ -542,7 +523,7 @@
         }
 
         const quizData = [
-            { question: "كم مرة تشرب قهوة او شاي يوميا？", options: ["ولا مرة", "مرة او مرتان", "من ثلاث الى خمس مرات", "عايش عليها"], scores: [100, 70, 35, 0], image: "bg1.png" },
+            { question: "كم مرة تشرب قهوة او شاي يوميا؟", options: ["ولا مرة", "مرة او مرتان", "من ثلاث الى خمس مرات", "عايش عليها"], scores: [100, 70, 35, 0], image: "bg1.png" },
             { question: "هل تدخن？", options: ["لا", "احيانا", "يوميا", "عدة باكيتات باليوم"], scores: [100, 70, 35, 0], image: "bg2.png" },
             { question: "هل تشرب ماء كافي يوميا؟", options: ["نعم", "أحياناً", "لا"], scores: [100, 50, 0], image: "bg3.png" },
             { question: "احد عرض عليك علكة او نعناع بشكل مفاجئ؟", options: ["لا", "احيانا", "مرات متكررة"], scores: [100, 50, 0], image: "bg4.png" },
@@ -558,7 +539,7 @@
         let currentQuestionIndex = 0;
         let totalScore = 0;
         let sparkleAnimationId = null; 
-        let isAnswering = false; // لمنع النقرات المتعددة العشوائية والسريعة جداً
+        let isAnswering = false; 
 
         const quizBox = document.getElementById('quiz-box');
         const bgLayer = document.getElementById('bg-layer');
@@ -719,7 +700,6 @@
         }
         initSparkles();
 
-        // التحكم ببدء الاختبار وبقاء الخلفية المتموجة خافتة أثناء عرض الفيديو
         startQuizBtn.addEventListener('click', () => {
             unlockMobileAudio();
             
@@ -735,7 +715,6 @@
             }, 2500); 
         });
 
-        // التحول الفعلي لصور الأسئلة يبدأ بعد انتهاء الفيديو تماماً
         introVideo.addEventListener('ended', () => {
             welcomeScreen.classList.add('hidden');
             questionScreen.classList.remove('hidden');
@@ -773,18 +752,17 @@
                 button.addEventListener('click', (e) => handleAnswer(e, index));
                 optionsContainer.appendChild(button);
             });
-            isAnswering = false; // فتح السماح بالإجابة للسؤال الجديد
+            isAnswering = false; 
         }
 
         function handleAnswer(e, selectedIndex) {
-            if (isAnswering) return; // حماية لضمان عدم تكرار الضغط أثناء الانميشن
+            if (isAnswering) return; 
             isAnswering = true;
 
             const selectedButton = e.target;
             const allButtons = optionsContainer.querySelectorAll('.option-btn');
             const currentData = quizData[currentQuestionIndex];
 
-            // حساب الإحداثيات الدقيقة لموقع الضغط لتوليد الانفجار البصري منه مباشرة
             const rect = selectedButton.getBoundingClientRect();
             const burstX = rect.left + rect.width / 2;
             const burstY = rect.top + rect.height / 2;
@@ -829,65 +807,40 @@
             }());
         }
 
-        // دالة العداد الرقمي المتقدمة للنتيجة التصاعدية بسلاسة فائقة
-        function animateScoreCounter(targetValue) {
-            let startValue = 0;
-            const durationSteps = 50; 
-            const stepsGrowth = targetValue / durationSteps;
-            
-            const timer = setInterval(() => {
-                startValue += stepsGrowth;
-                if (startValue >= targetValue) {
-                    startValue = targetValue;
-                    clearInterval(timer);
-                }
-                scoreContainer.innerText = `${startValue.toFixed(1)}%`;
-            }, 20);
-        }
-
+        // --- نظام التحكم بالخلفية ونشر تفاصيل واجهة النتيجة الزجاجية ---
         function showResults() {
             questionScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
             quizBox.style.transition = '';
             quizBox.classList.remove('quiz-pull-out', 'quiz-pull-in-prepare');
+            
+            // إخفاء طبقة الـ Slider الفرعية لتعرض الـ Body الخلفية بالكامل
+            bgLayer.classList.add('hidden');
             overlayLayer.classList.add('welcome-overlay'); 
             
             let finalCalculatedScore = (totalScore / 6).toFixed(1);
             let resultWord = "";
             let resultDescription = "";
             
+            // تغيير خلفية الـ body بالكامل بناءً على النتيجة المطلوبة ومطابقة الأزرار
             if (finalCalculatedScore >= 91.1 && finalCalculatedScore <= 100.0) {
-                document.body.classList.add('mode-glow-bg');
+                document.body.style.backgroundImage = "url('bg1.png')";
                 resultWord = "Pink Glow";
                 resultDescription = "Freshness, confidence, and care are clearly part of your daily whisper energy, a little care keeps it unforgettable.";
                 triggerFastConfetti();
             } else if (finalCalculatedScore >= 70.0 && finalCalculatedScore <= 91.0) {
-                document.body.classList.add('mode-balance-bg');
+                document.body.style.backgroundImage = "url('bg2.png')";
                 resultWord = "Pink Balance";
                 resultDescription = "small daily details may be affecting your whisper freshness and confidence more than you notice, it only needs the right touch.";
             } else if (finalCalculatedScore < 70.0) {
-                document.body.classList.add('mode-revival-bg');
+                document.body.style.backgroundImage = "url('bg3.png')";
                 resultWord = "Pink Revival";
                 resultDescription = "Your whisper is ready for a fresh beginning, one step could unlock your full Pink Glow.";
             }
             
             badgeContainer.innerText = resultWord;
+            scoreContainer.innerText = `${finalCalculatedScore}%`;
             descriptionContainer.innerText = resultDescription;
-
-            // بدء تصاعد العداد الرقمي بشكل سينمائي جذاب بعد ظهور الواجهة فوراً
-            setTimeout(() => {
-                animateScoreCounter(Number(finalCalculatedScore));
-            }, 300);
-
-            // ومضة سطوع سينمائية سريعة وجذابة لكامل الشاشة
-            document.body.animate([
-                { filter: "brightness(1)" },
-                { filter: "brightness(1.08)" },
-                { filter: "brightness(1)" }
-            ], {
-                duration: 2000,
-                easing: "ease"
-            });
         }
     </script>
 </body>
