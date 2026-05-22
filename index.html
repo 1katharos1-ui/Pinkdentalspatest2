@@ -297,13 +297,13 @@
             display: none !important;
         }
 
-        /* --- تعديل واجهة النتيجة لتصبح Blur وزجاجية مثل الصورة تماماً --- */
+        /* واجهة النتيجة الزجاجية الفخمة */
         #result-screen {
             background: rgba(255, 255, 255, 0.25); 
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px); 
             border-radius: 40px;
-            padding: 50px 30px;
+            padding: 50px 24px;
             width: 100%;
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
@@ -356,15 +356,15 @@
             animation: fadeInUp 0.6s ease-out 0.3s both;
         }
 
+        /* تعديل تصميم الوصف ليناسب النص العربي المنسق بسلاسة */
         .result-description {
             font-size: 1.1rem;
             font-weight: 500;
             color: #ffffff;
-            line-height: 1.6;
-            padding: 0 10px;
-            margin-bottom: 40px;
+            line-height: 1.7;
+            padding: 0 5px;
+            margin-bottom: 20px;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-            direction: ltr; 
             text-align: center;
             animation: fadeInUp 0.6s ease-out 0.45s both;
         }
@@ -372,23 +372,6 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-cta-text {
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: #ffffff;
-            line-height: 1.6;
-            direction: ltr;
-            text-align: center;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-            padding: 0 5px;
-            animation: softPulse 2.5s infinite ease-in-out;
-        }
-
-        @keyframes softPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.75; }
         }
     </style>
 </head>
@@ -430,9 +413,6 @@
             <div id="badge-container" class="result-badge"></div>
             <div id="score-container" class="result-score"></div>
             <div id="description-container" class="result-description"></div>
-            <div class="result-cta-text">
-                Send us your result screenshot<br>💗 and unlock your Pink Spa experience
-            </div>
         </div>
     </div>
 
@@ -524,7 +504,7 @@
 
         const quizData = [
             { question: "كم مرة تشرب قهوة او شاي يوميا؟", options: ["ولا مرة", "مرة او مرتان", "من ثلاث الى خمس مرات", "عايش عليها"], scores: [100, 70, 35, 0], image: "bg1.png" },
-            { question: "هل تدخن？", options: ["لا", "احيانا", "يوميا", "عدة باكيتات باليوم"], scores: [100, 70, 35, 0], image: "bg2.png" },
+            { question: "هل تدخن؟", options: ["لا", "احيانا", "يوميا", "عدة باكيتات باليوم"], scores: [100, 70, 35, 0], image: "bg2.png" },
             { question: "هل تشرب ماء كافي يوميا؟", options: ["نعم", "أحياناً", "لا"], scores: [100, 50, 0], image: "bg3.png" },
             { question: "احد عرض عليك علكة او نعناع بشكل مفاجئ؟", options: ["لا", "احيانا", "مرات متكررة"], scores: [100, 50, 0], image: "bg4.png" },
             { question: "تحس بجفاف بالفم؟", options: ["نادرا", "احيانا", "دائما"], scores: [100, 50, 0], image: "bg5.png" },
@@ -807,40 +787,52 @@
             }());
         }
 
-        // --- نظام التحكم بالخلفية ونشر تفاصيل واجهة النتيجة الزجاجية ---
+        // --- إعداد وعرض واجهة النتائج مع ضخ النصوص العربية الجديدة ديناميكياً وعزلها ---
         function showResults() {
             questionScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
             quizBox.style.transition = '';
             quizBox.classList.remove('quiz-pull-out', 'quiz-pull-in-prepare');
             
-            // إخفاء طبقة الـ Slider الفرعية لتعرض الـ Body الخلفية بالكامل
             bgLayer.classList.add('hidden');
             overlayLayer.classList.add('welcome-overlay'); 
             
             let finalCalculatedScore = (totalScore / 6).toFixed(1);
             let resultWord = "";
-            let resultDescription = "";
+            let fullDynamicContent = ""; 
             
-            // تغيير خلفية الـ body بالكامل بناءً على النتيجة المطلوبة ومطابقة الأزرار
             if (finalCalculatedScore >= 91.1 && finalCalculatedScore <= 100.0) {
                 document.body.style.backgroundImage = "url('bg1.png')";
                 resultWord = "Pink Glow";
-                resultDescription = "Freshness, confidence, and care are clearly part of your daily whisper energy, a little care keeps it unforgettable.";
+                
+                fullDynamicContent = `
+                    الانتعاش، الثقة و الاهتمام واضحين بكل تفاصيل الـ whisper الخاصة بيك… و لمسة عناية بسيطة تخلي حضورك ما ينوصف وينذكر دائمًا.<br><br>
+                    أرسل لنا نتيجة الـ Whisper الخاصة بيك (لقطة شاشة) و عيش تجربة الـ Pink Spa بكل تفاصيلها ✨
+                `;
                 triggerFastConfetti();
+                
             } else if (finalCalculatedScore >= 70.0 && finalCalculatedScore <= 91.0) {
                 document.body.style.backgroundImage = "url('bg2.png')";
                 resultWord = "Pink Balance";
-                resultDescription = "small daily details may be affecting your whisper freshness and confidence more than you notice, it only needs the right touch.";
+                
+                fullDynamicContent = `
+                    أحيانًا التفاصيل الصغيرة بعنايتك اليومية تأثر على انتعاشك و ثقتك أكثر مما تتوقع… وكل اللي تحتاجه هو اللمسة الصح للـ whisper الخاصة بيك.<br><br>
+                    أرسل لنا نتيجة الـ Whisper الخاصة بيك (لقطة شاشة) و عيش تجربة الـ Pink Spa بكل تفاصيلها ✨
+                `;
+                
             } else if (finalCalculatedScore < 70.0) {
                 document.body.style.backgroundImage = "url('bg3.png')";
                 resultWord = "Pink Revival";
-                resultDescription = "Your whisper is ready for a fresh beginning, one step could unlock your full Pink Glow.";
+                
+                fullDynamicContent = `
+                    الـ whisper الخاصة بيك جاهزة لبداية جديدة و منعشة… و خطوة وحدة ممكن تطلع كل الـ Pink Glow اللي بداخلك.<br><br>
+                    أرسل لنا نتيجة الـ Whisper الخاصة بيك (لقطة شاشة) و عيش تجربة الـ Pink Spa بكل تفاصيلها ✨
+                `;
             }
             
             badgeContainer.innerText = resultWord;
             scoreContainer.innerText = `${finalCalculatedScore}%`;
-            descriptionContainer.innerText = resultDescription;
+            descriptionContainer.innerHTML = fullDynamicContent;
         }
     </script>
 </body>
