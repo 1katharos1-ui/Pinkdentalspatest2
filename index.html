@@ -460,12 +460,33 @@ body::after{
 }
 
 /* ============================= */
-/* result */
+/* result (Enhanced Luxury Styles) */
 /* ============================= */
 
 #result-screen{
     text-align:center;
     color:#fff;
+    animation: fadeInResult .8s cubic-bezier(.215,.610,.355,1) forwards, resultFloat 5s ease-in-out infinite;
+}
+
+@keyframes resultFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-4px);
+    }
+}
+
+@keyframes fadeInResult{
+    from{
+        opacity:0;
+        transform:scale(.95);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
 }
 
 .result-intro{
@@ -476,24 +497,23 @@ body::after{
 }
 
 .result-badge{
+    position:relative;
     font-size:3.2rem;
     font-weight:900;
     margin-bottom:12px;
-
-    animation:luxuryGlow 3s ease-in-out infinite;
+    animation: luxuryGlow 3.5s ease-in-out infinite;
 }
 
 @keyframes luxuryGlow{
     0%,100%{
         text-shadow:
-        0 0 25px rgba(255,255,255,.12),
-        0 0 40px rgba(255,20,147,.22);
+        0 0 20px rgba(255,255,255,.12),
+        0 0 40px rgba(255,105,180,.22);
     }
-
     50%{
         text-shadow:
-        0 0 35px rgba(255,255,255,.2),
-        0 0 70px rgba(255,20,147,.45);
+        0 0 30px rgba(255,255,255,.25),
+        0 0 70px rgba(255,105,180,.4);
     }
 }
 
@@ -850,7 +870,7 @@ image:"bg1.png"
 },
 
 {
-question:"هل تدخن؟",
+question:"هل تدخن？",
 options:["لا","احيانا","يوميا","عدة باكيتات باليوم"],
 scores:[100,70,35,0],
 image:"bg2.png"
@@ -983,12 +1003,14 @@ showResults();
 }
 
 /* ============================= */
+/* Luxury Smooth Score Counter Counter */
+/* ============================= */
 
 function animateScore(target){
 
 let currentScore = 0;
 
-const increment = target / 40;
+const increment = target / 45;
 
 const interval = setInterval(()=>{
 
@@ -1017,6 +1039,8 @@ resultScreen.classList.remove("hidden");
 
 let finalScore =
 (total / quizData.length).toFixed(1);
+
+scoreContainer.innerText = "0.0%";
 
 let word = "";
 let desc = "";
@@ -1059,7 +1083,19 @@ badgeContainer.innerText = word;
 
 descriptionContainer.innerText = desc;
 
-animateScore(Number(finalScore));
+/* Luxury transition buffer & body flash */
+setTimeout(()=>{
+    animateScore(Number(finalScore));
+},350);
+
+document.body.animate([
+    { filter:"brightness(1)" },
+    { filter:"brightness(1.08)" },
+    { filter:"brightness(1)" }
+],{
+    duration:2200,
+    easing:"ease"
+});
 }
 
 /* ============================= */
