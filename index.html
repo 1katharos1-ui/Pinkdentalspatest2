@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pink Dental Spa - Enter the PINK world</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <style>
@@ -14,7 +13,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', 'Plus Jakarta Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -28,13 +27,14 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            overflow: hidden;
-            transition: background 1s ease, background-image 1s ease;
+            /* تم تعديل الخيار ليتيح التمرير على الهواتف الصغيرة جداً بدلاً من قطع العناصر */
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 10px 0;
         }
 
-        /* حاوية الـ Three.js الشاشية للدخان الحقيقي المتموج */
         #threeCanvasContainer {
-            position: absolute;
+            position: fixed; /* تم تحويله إلى fixed ليبقى ثابتاً خلف المحتوى عند السكرول */
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 1;
@@ -42,13 +42,12 @@
             opacity: 1;
         }
 
-        /* تأثير التعتيم الخفيف للدخان أثناء عرض الفيديو لزيادة التركيز على الفيديو */
         .dimmed-smoke {
             filter: brightness(0.4) contrast(1.1);
         }
 
         .bg-slider {
-            position: absolute;
+            position: fixed; /* لضمان ثبات الخلفية */
             top: 0; left: 0; right: 0; bottom: 0;
             background-size: cover;
             background-position: center;
@@ -66,7 +65,7 @@
         }
 
         .overlay {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.02); 
             z-index: 2;
@@ -77,9 +76,8 @@
             background: transparent !important;
         }
 
-        /* كانفاس ومضات النجوم والسباركلز اللامعة الفخمة فوق الدخان */
         #sparkleCanvas {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 3; 
@@ -88,9 +86,8 @@
             transition: opacity 0.8s ease-in-out;
         }
 
-        /* كانفاس تأثير انفجار الجزيئات الورقية البراقة عند الضغط على خيار */
         #particleCanvas {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 5;
@@ -102,9 +99,9 @@
             z-index: 4;
             background: transparent; 
             border: none;
-            padding: 20px;
-            width: 90%;
-            max-width: 480px;
+            padding: 10px;
+            width: 95%;
+            max-width: 420px;
             box-shadow: none;
             text-align: center;
             transform: scale(1);
@@ -115,7 +112,7 @@
         .card-box {
             background: #ffffff;
             border-radius: 32px;
-            padding: 40px 30px;
+            padding: 35px 25px;
             box-shadow: 0 25px 60px rgba(180, 20, 100, 0.12);
             display: flex;
             flex-direction: column;
@@ -138,25 +135,25 @@
             outline: none;
             background-color: #000;
             object-fit: cover;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
         .main-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             color: #2b353c;
             font-weight: 600;
             line-height: 1.25;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-shadow: none;
             direction: ltr;
         }
 
         .sub-title {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: #9aa4ac;
             line-height: 1.6;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-weight: 500;
             max-width: 90%;
             direction: ltr;
@@ -165,10 +162,10 @@
         .start-btn {
             background: linear-gradient(to left, #ff00cc, #ffc0cb);
             border: none;
-            padding: 16px 45px;
-            border-radius: 20px;
+            padding: 14px 40px;
+            border-radius: 18px;
             color: #ffffff; 
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
@@ -179,7 +176,7 @@
             box-shadow: 0 10px 25px rgba(255, 0, 204, 0.25);
             direction: ltr;
             width: 90%;
-            max-width: 290px;
+            max-width: 280px;
         }
 
         .start-btn .heart-icon {
@@ -189,49 +186,39 @@
         }
 
         .start-btn:hover, .start-btn:active {
-            transform: scale(1.03);
+            transform: scale(1.02);
             box-shadow: 0 12px 30px rgba(255, 0, 204, 0.35);
             opacity: 0.95;
         }
 
-        /* تصميم أزرار الخيارات مع تأثير انميشن الدخول الجانبي اللطيف */
         .option-btn {
             position: relative;
             z-index: 100;
             background: rgba(255, 20, 147, 0.18); 
             border: 1px solid rgba(255, 20, 147, 0.4); 
-            padding: 20px 24px;
-            border-radius: 20px;
+            padding: 16px 20px;
+            border-radius: 18px;
             color: #ffffff; 
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             text-align: right;
             width: 100%;
             outline: none;
             overflow: hidden;
-            
-            /* انميشن الدخول الانسيابي المتتابع للأزرار */
             animation: buttonSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
-        /* فروقات زمنية بسيطة جداً لظهور الأزرار بالتتابع الجذاب */
         .option-btn:nth-child(1) { animation-delay: 0s; }
         .option-btn:nth-child(2) { animation-delay: 0.08s; }
         .option-btn:nth-child(3) { animation-delay: 0.16s; }
         .option-btn:nth-child(4) { animation-delay: 0.24s; }
 
         @keyframes buttonSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .option-btn:hover, .option-btn:active {
@@ -254,14 +241,12 @@
         }
 
         h2 {
-            margin-bottom: 40px;
-            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-size: 1.3rem;
             line-height: 1.6;
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.9);
-            
-            /* انميشن نزول ناعم لعنوان السؤال */
             animation: fadeInDown 0.5s ease-out;
         }
 
@@ -273,7 +258,7 @@
         .options-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         @keyframes glassSelected {
@@ -297,30 +282,33 @@
             display: none !important;
         }
 
-        /* واجهة النتيجة الزجاجية الفخمة */
+        /* تعديل جوهري وشامل لواجهة النتيجة الزجاجية الفخمة */
         #result-screen {
-            background: rgba(255, 255, 255, 0.25); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px); 
-            border-radius: 40px;
-            padding: 50px 24px;
+            background: rgba(255, 255, 255, 0.18); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); 
+            border-radius: 30px;
+            padding: 22px 16px; 
             width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
             animation: fadeInResult 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         @keyframes fadeInResult {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .result-intro {
-            font-size: 1.15rem;
+            font-size: 0.9rem; 
             font-weight: 700;
             color: #ff66a3; 
-            margin-bottom: 12px;
-            letter-spacing: 1px;
+            margin-bottom: 4px; 
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
@@ -331,13 +319,13 @@
         }
 
         .result-badge {
-            font-size: 3.6rem;
+            font-size: 2.3rem; /* تصغير محسوب لعدم دفع العناصر خارج الشاشة */
             font-weight: 800;
             color: #ffffff;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-            margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2px;
             animation: badgeBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
         }
 
@@ -348,29 +336,97 @@
         }
 
         .result-score {
-            font-size: 1.9rem;
+            font-size: 1.3rem; 
             font-weight: 600;
             color: #ffffff;
-            margin-bottom: 30px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px; 
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             animation: fadeInUp 0.6s ease-out 0.3s both;
         }
 
-        /* تعديل تصميم الوصف ليناسب النص العربي المنسق بسلاسة */
         .result-description {
-            font-size: 1.1rem;
+            font-size: 0.9rem; 
             font-weight: 500;
             color: #ffffff;
-            line-height: 1.7;
-            padding: 0 5px;
-            margin-bottom: 20px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.5;
+            padding: 0 4px;
+            margin-bottom: 15px; 
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
             text-align: center;
             animation: fadeInUp 0.6s ease-out 0.45s both;
         }
 
+        /* تعديل أبعاد علبة الكود لضمان الاحتفاظ بسطر واحد وعدم النزول لسطرين */
+        .premium-code-box {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px dashed rgba(255, 102, 163, 0.6);
+            padding: 8px 12px; 
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem; /* تم تصغير خط الكود ليتناسب بشكل مثالي مع سطر الموبايل المفرود */
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px; 
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 290px;
+            white-space: nowrap; /* منع النص من النزول لسطر جديد نهائياً */
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out 0.55s both;
+        }
+        
+        .premium-code-box:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ff66a3;
+        }
+
+        .premium-code-box span.copy-lbl {
+            font-size: 0.7rem;
+            background: #ff66a3;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        #code-text-placeholder {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* زر الواتساب المستقر والمحمي من الاختفاء */
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border: none;
+            padding: 12px 20px; 
+            border-radius: 16px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 290px;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out 0.65s both;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -378,12 +434,10 @@
 <body>
 
     <div id="threeCanvasContainer"></div>
-
     <div class="bg-slider" id="bg-layer"></div>
     <div class="overlay welcome-overlay" id="overlay-layer"></div>
 
     <canvas id="sparkleCanvas"></canvas>
-    
     <canvas id="particleCanvas"></canvas>
 
     <div class="quiz-container" id="quiz-box">
@@ -413,11 +467,22 @@
             <div id="badge-container" class="result-badge"></div>
             <div id="score-container" class="result-score"></div>
             <div id="description-container" class="result-description"></div>
+            
+            <div class="premium-code-box" id="premium-code-box" onclick="copyCodeToClipboard()">
+                <span id="code-text-placeholder">PW-XXXXXX</span>
+                <span class="copy-lbl">اضغط للنسخ</span>
+            </div>
+
+            <a href="#" target="_blank" class="whatsapp-btn" id="whatsapp-redirect-btn">
+                إرسال الكود وتفعيل الجلسة عبر WhatsApp
+            </a>
         </div>
     </div>
 
     <script>
-        // --- نظام إدارة تأثير انفجار الجزيئات البصري الفخم والمباشر ---
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKsXNhCGqAD3v5_-XU0tC3ixKjV0GOJEjDxAyk66gNWjbrV7pRMl47PxHD39rlxg4/exec";
+        const WHATSAPP_PHONE_NUMBER = "9647777900545";
+
         const particleSystem = {
             canvas: document.getElementById('particleCanvas'),
             ctx: null,
@@ -479,7 +544,6 @@
         particleSystem.init();
         particleSystem.animate();
 
-        // الصوتيات وضبط تفعيلها على النقال
         const clickSound = new Audio('click.mp3');
         clickSound.volume = 0.5;
 
@@ -503,12 +567,12 @@
         }
 
         const quizData = [
-            { question: "كم مرة تشرب قهوة او شاي يوميا؟", options: ["ولا مرة", "مرة او مرتان", "من ثلاث الى خمس مرات", "عايش عليها"], scores: [100, 70, 35, 0], image: "bg1.png" },
-            { question: "هل تدخن؟", options: ["لا", "احيانا", "يوميا", "عدة باكيتات باليوم"], scores: [100, 70, 35, 0], image: "bg2.png" },
-            { question: "هل تشرب ماء كافي يوميا؟", options: ["نعم", "أحياناً", "لا"], scores: [100, 50, 0], image: "bg3.png" },
-            { question: "احد عرض عليك علكة او نعناع بشكل مفاجئ؟", options: ["لا", "احيانا", "مرات متكررة"], scores: [100, 50, 0], image: "bg4.png" },
-            { question: "تحس بجفاف بالفم؟", options: ["نادرا", "احيانا", "دائما"], scores: [100, 50, 0], image: "bg5.png" },
-            { question: "تحس الناس تبتعد و انت تحجي؟", options: ["لا", "يمكن", "صارت اكثر من مرة"], scores: [100, 50, 0], image: "bg6.png" }
+            { id: "q1", question: "كم مرة تشرب قهوة او شاي يوميا؟", options: ["ولا مرة", "مرة او مرتان", "من ثلاث الى خمس مرات", "عايش عليها"], scores: [100, 70, 35, 0], image: "bg1.png" },
+            { id: "q2", question: "هل تدخن？", options: ["لا", "احيانا", "يوميا", "عدة باكيتات باليوم"], scores: [100, 70, 35, 0], image: "bg2.png" },
+            { id: "q3", question: "هل تشرب ماء كافي يوميا؟", options: ["نعم", "أحياناً", "لا"], scores: [100, 50, 0], image: "bg3.png" },
+            { id: "q4", question: "احد عرض عليك علكة او نعناع بشكل مفاجئ؟", options: ["لا", "احيانا", "مرات متكررة"], scores: [100, 50, 0], image: "bg4.png" },
+            { id: "q5", question: "تحس بجفاف بالفم؟", options: ["نادرا", "احيانا", "دائما"], scores: [100, 50, 0], image: "bg5.png" },
+            { id: "q6", question: "تحس الناس تبتعد و انت تحجي؟", options: ["لا", "يمكن", "صارت اكثر من مرة"], scores: [100, 50, 0], image: "bg6.png" }
         ];
 
         function preloadImages() {
@@ -520,6 +584,8 @@
         let totalScore = 0;
         let sparkleAnimationId = null; 
         let isAnswering = false; 
+        let userResponsesPayload = {}; 
+        let finalGeneratedCode = "";
 
         const quizBox = document.getElementById('quiz-box');
         const bgLayer = document.getElementById('bg-layer');
@@ -538,7 +604,9 @@
         const introVideo = document.getElementById('introVideo');
         const threeContainer = document.getElementById('threeCanvasContainer');
 
-        // --- كود الـ Shader المتطور للدخان المتموج من صورتك الأصلية ---
+        const codeTextPlaceholder = document.getElementById('code-text-placeholder');
+        const whatsappRedirectBtn = document.getElementById('whatsapp-redirect-btn');
+
         let scene, camera, renderer, smokeMaterial, smokeMesh;
         let clock = new THREE.Clock();
 
@@ -626,7 +694,6 @@
 
         initThreeSmoke();
 
-        // تشغيل ومضات النجوم المستقلة فوق الدخان
         function initSparkles() {
             sparkleCanvas.width = window.innerWidth;
             sparkleCanvas.height = window.innerHeight;
@@ -749,6 +816,7 @@
             particleSystem.burstParticles(burstX, burstY, 35);
 
             totalScore += currentData.scores[selectedIndex];
+            userResponsesPayload[currentData.id] = currentData.options[selectedIndex];
             
             clickSound.currentTime = 0;
             clickSound.play().catch(e => {});
@@ -771,7 +839,7 @@
                             loadQuestion();
                         }, 50);
                     } else {
-                        showResults();
+                        shipDataAndShowResults();
                     }
                 }, 600);
             }, 600);
@@ -787,8 +855,52 @@
             }());
         }
 
-        // --- إعداد وعرض واجهة النتائج مع ضخ النصوص العربية الجديدة ديناميكياً وعزلها ---
-        function showResults() {
+        function shipDataAndShowResults() {
+            let finalCalculatedScore = (totalScore / 6).toFixed(1);
+            let resultWord = "";
+            
+            if (finalCalculatedScore >= 91.1 && finalCalculatedScore <= 100.0) {
+                resultWord = "Pink Glow";
+            } else if (finalCalculatedScore >= 70.0 && finalCalculatedScore <= 91.0) {
+                resultWord = "Pink Balance";
+            } else {
+                resultWord = "Pink Revival";
+            }
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = String(now.getFullYear()).slice(-2);
+            const randomQuad = Math.floor(1000 + Math.random() * 9000);
+            finalGeneratedCode = `PW-${day}${month}${year}-${randomQuad}`;
+
+            const sheetPayload = {
+                code: finalGeneratedCode,
+                result: resultWord,
+                score: `${finalCalculatedScore}%`,
+                q1: userResponsesPayload["q1"],
+                q2: userResponsesPayload["q2"],
+                q3: userResponsesPayload["q3"],
+                q4: userResponsesPayload["q4"],
+                q5: userResponsesPayload["q5"],
+                q6: userResponsesPayload["q6"]
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(sheetPayload)
+            }).then(() => {
+                console.log("Data synced seamlessly.");
+            }).catch(err => {
+                console.error("Network sync omitted:", err);
+            });
+
+            showResults(resultWord, finalCalculatedScore, finalGeneratedCode);
+        }
+
+        function showResults(resultWord, finalCalculatedScore, code) {
             questionScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
             quizBox.style.transition = '';
@@ -797,42 +909,47 @@
             bgLayer.classList.add('hidden');
             overlayLayer.classList.add('welcome-overlay'); 
             
-            let finalCalculatedScore = (totalScore / 6).toFixed(1);
-            let resultWord = "";
             let fullDynamicContent = ""; 
             
-            if (finalCalculatedScore >= 91.1 && finalCalculatedScore <= 100.0) {
+            if (resultWord === "Pink Glow") {
                 document.body.style.backgroundImage = "url('bg1.png')";
-                resultWord = "Pink Glow";
-                
                 fullDynamicContent = `
-                    الانتعاش، الثقة و الاهتمام واضحين بكل تفاصيل الـ whisper الخاصة بيك… و لمسة عناية بسيطة تخلي حضورك ما ينوصف وينذكر دائمًا.<br><br>
-                    أرسل لنا نتيجة الـ Whisper الخاصة بيك (لقطة شاشة) و عيش تجربة الـ Pink Spa بكل تفاصيلها ✨
+                    الانتعاش، الثقة والاهتمام واضحين بكل تفاصيل الـ whisper الخاصة بك… ولمسة عناية بسيطة تخلي حضورك ما ينوصف وينذكر دائمًا.<br>
+                    اضغط على الزر بالأسفل لإرسال كود الحالة وتأكيد حجز جلستك فوراً ✨
                 `;
                 triggerFastConfetti();
                 
-            } else if (finalCalculatedScore >= 70.0 && finalCalculatedScore <= 91.0) {
+            } else if (resultWord === "Pink Balance") {
                 document.body.style.backgroundImage = "url('bg2.png')";
-                resultWord = "Pink Balance";
-                
                 fullDynamicContent = `
-                    أحيانًا التفاصيل الصغيرة بعنايتك اليومية تأثر على انتعاشك و ثقتك أكثر مما تتوقع… وكل اللي تحتاجه هو اللمسة الصح للـ whisper الخاصة بيك.<br><br>
-                    أرسل لنا نتيجة الـ Whisper الخاصة بيك (لقطة شاشة) و عيش تجربة الـ Pink Spa بكل تفاصيلها ✨
+                    أحيانًا التفاصيل الصغيرة بعنايتك اليومية تأثر على انتعاشك وثقتك أكثر مما تتوقع… وكل اللي تحتاجه هو اللمسة الصح للـ whisper الخاصة بك.<br>
+                    اضغط على الزر بالأسفل لإرسال كود الحالة وتأكيد حجز جلستك فوراً ✨
                 `;
                 
-            } else if (finalCalculatedScore < 70.0) {
+            } else if (resultWord === "Pink Revival") {
                 document.body.style.backgroundImage = "url('bg3.png')";
-                resultWord = "Pink Revival";
-                
                 fullDynamicContent = `
-                    الـ whisper الخاصة بيك جاهزة لبداية جديدة و منعشة… و خطوة وحدة ممكن تطلع كل الـ Pink Glow اللي بداخلك.<br><br>
-                    أرسل لنا نتيجة الـ Whisper الخاصة بيك (لقطة شاشة) و عيش تجربة الـ Pink Spa بكل تفاصيلها ✨
+                    الـ whisper الخاصة بك جاهزة لبداية جديدة ومنعشة… وخطوة وحدة ممكن تطلع كل الـ Pink Glow اللي بداخلك.<br>
+                    اضغط على الزر بالأسفل لإرسال كود الحالة وتأكيد حجز جلستك فوراً ✨
                 `;
             }
             
             badgeContainer.innerText = resultWord;
             scoreContainer.innerText = `${finalCalculatedScore}%`;
             descriptionContainer.innerHTML = fullDynamicContent;
+            
+            codeTextPlaceholder.innerText = code;
+            const encodedText = encodeURIComponent(`الكود الخاص بي هو: ${code}`);
+            whatsappRedirectBtn.href = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodedText}`;
+        }
+
+        function copyCodeToClipboard() {
+            if(!finalGeneratedCode) return;
+            navigator.clipboard.writeText(finalGeneratedCode).then(() => {
+                alert("تم نسخ كود الحالة الخاص بك بنجاح: " + finalGeneratedCode);
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
         }
     </script>
 </body>
